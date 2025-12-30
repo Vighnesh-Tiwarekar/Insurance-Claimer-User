@@ -1,0 +1,175 @@
+/* Login Page Container */
+.login-signup-form {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(187, 218, 178);
+    padding: 20px;
+
+    border: 10px solid black;
+}
+
+/* Tab Container */
+.login-tabs {
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    background-color: white;
+
+    border-radius: 12px 12px 0 0;
+    overflow: hidden;
+
+    /* border: 5px solid red; */
+}
+
+.login-tab {
+    flex: auto;
+    padding: 15px 20px;
+    text-align: center;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    background-color: #f0f0f0;
+    color: #515050;
+    border: none;
+}
+
+.login-tab.active {
+    background-color: white;
+    color: #5e77e6;
+    border-bottom: 3px solid #667eea;
+}
+
+.login-tab:hover {
+    background: #e8e8e8;
+}
+
+
+.login-form-container {
+    width: 100%;
+    max-width: 400px;
+    background: white;
+    border-radius: 0 0 12px 12px;
+    overflow: hidden;
+}
+
+.login-form {
+    padding: 40px 30px;
+}
+
+/* Form Fields */
+.form-field {
+    margin-bottom: 25px;
+}
+
+.form-field-row {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.form-input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.form-input:hover {
+    border-color: #b0b0b0;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 14px;
+    background-color: #5b82dd;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+
+.submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 229, 0.4);
+}
+
+.submit-btn:active {
+    transform: translateY(0);
+}
+
+/* OTP Form */
+.otp-form-container {
+    width: 100%;
+    max-width: 400px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    padding: 40px 30px;
+}
+
+.otp-field {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 25px;
+}
+
+.otp-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #333;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.otp-subtitle {
+    font-size: 14px;
+    color: #666;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+    .login-signup-form {
+        padding: 10px;
+    }
+
+    .login-tabs,
+    .login-form-container,
+    .otp-form-container {
+        max-width: 100%;
+    }
+
+    .login-form,
+    .otp-form-container {
+        padding: 30px 20px;
+    }
+
+    .form-input {
+        font-size: 16px;
+    }
+}

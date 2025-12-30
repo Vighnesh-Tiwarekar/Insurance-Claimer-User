@@ -1,111 +1,121 @@
-import React, { useContext, useState } from 'react'
-import { AuthContext } from '../context/AuthContext'
-import { Navigate, useNavigate } from 'react-router-dom'
+import React, { useContext, useState } from "react";
+import { AuthContext } from "../context/AuthContext";
+import { Navigate, useNavigate } from "react-router-dom";
+import '../css/pages_css/Login.css';
 
 const LoginForm = ({ method, setmethod, setisOTP, loginContext, navigate }) => {
-
   const handleSubmit = (e) => {
-
-    e.preventDefault()
+    e.preventDefault();
 
     if (!method) {
-      loginContext.setlogin(1)
-      navigate('/')
+      loginContext.setlogin(1);
+      navigate("/");
+    } else {
+      setisOTP(true);
     }
-    else {
-      setisOTP(true)
-    }
-
-  }
+  };
 
   return (
-    <>
-      <div className=' w-fit flex mx-auto border-2 border-black'>
-
-        <div className={` p-[10px] cursor-pointer ${method ? 'bg-white' : 'bg-[gray]'} `}
-          onClick={() => setmethod(0)}>
-          Sign In</div>
-
-        <div className='border-[1.5px]'></div>
-
-        <div className={` p-[10px] cursor-pointer ${method ? 'bg-[gray]' : 'bg-white'} `}
-          onClick={() => setmethod(1)}>
-          Sign Up</div>
-      </div>
-
-      <div className='w-fit border-2 mx-auto'>
-
-        <form onSubmit={handleSubmit} className='p-[10px] '>
-
-          <div className='flex-col'>
-
-            <div className='flex justify-between'>
-              <div>Email</div>
-              <input className='border-[1.5px]' type="email" required />
-            </div>
-
-            <div className='flex justify-between gap-[15px]'>
-              <div>Password</div>
-              <input className='border-[1.5px]' type="password" required />
-            </div>
-
-          </div>
-
-          <button className='block w-fit border-2 mx-auto' type='submit'>
-            Submit
-          </button>
-
-        </form>
-
-      </div>
-    </>
-  )
-}
-
-const OTPForm = ({loginContext, navigate}) => {
-
-  const handleSubmit = (e) => {
-
-    e.preventDefault()
-
-    loginContext.setlogin(1)
-    navigate('/')
-
-  }
-
-  return (
-    <>
-      <form onSubmit={handleSubmit} className='border-[1.5px] w-fit mx-auto'>
-
-        <div className='flex w-fit mx-auto'>
-
-          <div>OTP</div>
-
-          <input className='border-[1.5px]' type="text" />
-
+    <div className="login-signup-form">
+      <div className="login-tabs">
+        <div
+          className={`login-tab ${!method ? 'active' : ''}`}
+          onClick={() => setmethod(0)}
+        >
+          Sign In
         </div>
 
-        <button className='block w-fit border-2 mx-auto' type='submit'>
-          Submit
-        </button>
+        <div
+          className={`login-tab ${method ? 'active' : ''}`}
+          onClick={() => setmethod(1)}
+        >
+          Sign Up
+        </div>
+      </div>
 
-      </form>
-    </>
-  )
-}
+      <div className="login-form-container">
+        <form onSubmit={handleSubmit} className="login-form">
+          <div className="form-field">
+            <div className="form-field-row">
+              <label className="form-label">Email</label>
+              <input className="form-input" type="email" placeholder="Enter your email" required />
+            </div>
+          </div>
+
+          <div className="form-field">
+            <div className="form-field-row">
+              <label className="form-label">Password</label>
+              <input className="form-input" type="password" placeholder="Enter your password" required />
+            </div>
+          </div>
+
+          <button className="submit-btn" type="submit">
+            {method ? 'Sign Up' : 'Sign In'}
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+const OTPForm = ({ loginContext, navigate }) => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    loginContext.setlogin(1);
+    navigate("/");
+  };
+
+  return (
+    <div className="login-signup-form">
+      <div className="otp-form-container">
+        <h2 className="otp-title">Verify OTP</h2>
+        <p className="otp-subtitle">Enter the code sent to your email</p>
+        
+        <form onSubmit={handleSubmit}>
+          <div className="otp-field">
+            <label className="form-label">Enter OTP</label>
+            <input 
+              className="form-input" 
+              type="text" 
+              placeholder="000000"
+              maxLength="6"
+              required 
+            />
+          </div>
+
+          <button className="submit-btn" type="submit">
+            Verify & Continue
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+};
 
 export const Login = () => {
+  const [method, setmethod] = useState(0);
+  const [isOTP, setisOTP] = useState(false);
 
-  const [method, setmethod] = useState(0)
-  const [isOTP, setisOTP] = useState(false)
-
-  const loginContext = useContext(AuthContext)
+  const loginContext = useContext(AuthContext);
   const navigate = useNavigate();
 
   return (
     <>
-      {isOTP ? <OTPForm loginContext = {loginContext} navigate = {navigate}></OTPForm> : 
-      <LoginForm method={method} setmethod={setmethod} setisOTP={setisOTP} loginContext = {loginContext} navigate = {navigate}></LoginForm>}
+      {isOTP ? (
+        <OTPForm loginContext={loginContext} navigate={navigate}></OTPForm>
+      ) : (
+        <LoginForm
+          method={method}
+          setmethod={setmethod}
+          setisOTP={setisOTP}
+          loginContext={loginContext}
+          navigate={navigate}
+        ></LoginForm>
+      )}
     </>
-  )
-}
+  );
+};
+
+
+
