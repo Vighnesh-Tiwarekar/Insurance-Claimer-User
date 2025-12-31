@@ -2,16 +2,23 @@ import React, { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { Navigate, useNavigate } from "react-router-dom";
 import '../css/pages_css/Login.css';
+import { resend_otp, sign_in, sign_up, validate_otp } from "../functions/login_functions";
 
 const LoginForm = ({ method, setmethod, setisOTP, loginContext, navigate }) => {
+
+  const [Mssg, setMssg] = useState('')
+
   const handleSubmit = (e) => {
+
     e.preventDefault();
 
-    if (!method) {
-      loginContext.setlogin(1);
-      navigate("/");
-    } else {
-      setisOTP(true);
+    if (!method) {   //sign in path
+
+      sign_in(loginContext, navigate, setMssg)
+
+    } 
+    else {    // sign up path
+      sign_up(setisOTP, setMssg)
     }
   };
 
@@ -38,14 +45,14 @@ const LoginForm = ({ method, setmethod, setisOTP, loginContext, navigate }) => {
           <div className="form-field">
             <div className="form-field-row">
               <label className="form-label">Email</label>
-              <input className="form-input" type="email" placeholder="Enter your email" required />
+              <input className="form-input" type="email" placeholder="Enter your email" required id="email"/>
             </div>
           </div>
 
           <div className="form-field">
             <div className="form-field-row">
               <label className="form-label">Password</label>
-              <input className="form-input" type="password" placeholder="Enter your password" required />
+              <input className="form-input" type="password" placeholder="Enter your password" required  id="password"/>
             </div>
           </div>
 
@@ -53,42 +60,74 @@ const LoginForm = ({ method, setmethod, setisOTP, loginContext, navigate }) => {
             {method ? 'Sign Up' : 'Sign In'}
           </button>
         </form>
+
+        <div>
+          {Mssg}
+        </div>
       </div>
     </div>
   );
 };
 
-const OTPForm = ({ loginContext, navigate }) => {
+const OTPForm = ({ loginContext, navigate, setisOTP }) => {
+
+  const [msg, setMsg] = useState('')
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    loginContext.setlogin(1);
-    navigate("/");
+    validate_otp(loginContext, navigate, setMsg)
   };
+
+  const resendOTP = (e) => {
+    e.preventDefault()
+
+    resend_otp(setMsg)
+  }
+
+  const goBack = () => {
+
+    setisOTP(false);
+  }
 
   return (
     <div className="login-signup-form">
       <div className="otp-form-container">
         <h2 className="otp-title">Verify OTP</h2>
         <p className="otp-subtitle">Enter the code sent to your email</p>
-        
+
         <form onSubmit={handleSubmit}>
           <div className="otp-field">
             <label className="form-label">Enter OTP</label>
-            <input 
-              className="form-input" 
-              type="text" 
+            <input
+              className="form-input"
+              type="text"
               placeholder="000000"
               maxLength="6"
-              required 
+              required
+              id="otp"
             />
           </div>
 
           <button className="submit-btn" type="submit">
             Verify & Continue
           </button>
+
+          <button className="submit-btn" onClick={resendOTP}>
+            Resend
+          </button>
+
         </form>
+
+        <div>
+          {msg}
+        </div>
+
       </div>
+
+      <button className="border-[1.5px]" onClick={goBack}>
+        Back
+      </button>
     </div>
   );
 };
@@ -103,7 +142,7 @@ export const Login = () => {
   return (
     <>
       {isOTP ? (
-        <OTPForm loginContext={loginContext} navigate={navigate}></OTPForm>
+        <OTPForm loginContext={loginContext} navigate={navigate} setisOTP={setisOTP}></OTPForm>
       ) : (
         <LoginForm
           method={method}

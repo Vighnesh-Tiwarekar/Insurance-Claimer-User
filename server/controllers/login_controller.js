@@ -1,7 +1,7 @@
-import { temp_user, userTable } from "../models/userModel";
-import { generate_otp, send_otp } from "../utils/otp_utils";
-import { encrypt_pass, validate_pass } from "../utils/password_util";
-import { decoded_token, generate_token, validate_token } from "../utils/token_util";
+import { temp_user, users } from "../models/userModel.js";
+import { generate_otp, send_otp } from "../utils/otp_utils.js";
+import { encrypt_pass, validate_pass } from "../utils/password_util.js";
+import { decoded_token, generate_token, validate_token } from "../utils/token_util.js";
 
 export const sign_in = async (req, res) => {
 
@@ -9,29 +9,26 @@ export const sign_in = async (req, res) => {
 
         const data = req.body;
 
-        const user = userTable.findOne({email: data.email})
+        const user = await users.findOne({ email: data.email })
 
-        if(!user)
-        {
-            return res.status(404).json({mssg: 'Email not found'})
+        if (!user) {
+            return res.status(404).json({ mssg: 'Email not found' })
         }
 
-        if(await validate_pass(user.password, data.password))
-        {
+        if (await validate_pass(user.password, data.password)) {
 
             const token = generate_token(data, '12h')
 
-            return res.status(202).cookie('token',token,{
+            return res.status(202).cookie('token', token, {
                 httpOnly: true,
-                secure: true,
-                sameSite: 'None',
+                sameSite: 'Lax', // Allows localhost usage
+                secure: false,   // Set to TRUE only if you are using HTTPS
                 maxAge: 1000 * 60 * 60 * 12
-
-            }).json({mssg: 'Login Successful'})
+            }).json({ mssg: 'Login Successful' })
 
         }
 
-        return res.status(401).json({msssg: 'Incorrect Password'})
+        return res.status(401).json({ mssg: 'Incorrect Password' })
 
     }
     catch (err) {
@@ -47,11 +44,11 @@ export const sign_up = async (req, res) => {
 
         const data = req.body
 
-        const poss_user = user.findOne({email: data.email})
+        const poss_user = await users.findOne({ email: data.email }).lean()
 
-        if(poss_user)
-        {
-            return res.status(401).json({mssg: 'Email already exists'})
+        if (poss_user) {
+            console.log('ddd')
+            return res.status(401).json({ mssg: 'Email already exists' })
         }
 
         const hashedpass = await encrypt_pass(data.password);
@@ -59,70 +56,75 @@ export const sign_up = async (req, res) => {
         const otp = generate_otp();
 
         await send_otp(otp);
-        
-        await temp_user.create({
-            email: data.email,
-            password: hashedpass,
-            otp: otp
-        })
-        
+
+        await temp_user.findOneAndUpdate({ email: data.email },
+            {
+                email: data.email,
+                password: hashedpass,
+                otp: otp
+            },
+            {
+                upsert: true, setDefaultsOnInsert: true
+            })
+
         const token = generate_token(data, '5m')
 
-        return res.status(200).cookie('temp_token', token,{
+        return res.status(200).cookie('temp_token', token, {
             httpOnly: true,
-            secure: true,
-            sameSite: 'None',
+            sameSite: 'Lax', // Allows localhost usage
+            secure: false,   // Set to TRUE only if you are using HTTPS
             maxAge: 1000 * 60 * 30
-        }).json('Enter OTP')
+        }).json({ mssg: 'Enter OTP' })
+
+    }
+    catch (err) {
+        console.log('Error', err)
+        return res.status(501).json({ mssg: 'Some Error Occured' })
+    }
+
+}
+
+
+export const validate_otp = async (req, res) => {
+
+    try {
+
+        const data = req.body
+
+        if (!validate_token(req.cookies.temp_token)) {
+            return res.status(401).json({ mssg: 'OTP expired' })
+        }
+
+        const decoded = decoded_token(req.cookies.temp_token)
+
+        const temp = await temp_user.findOne({ email: decoded.email, otp: data.otp });
+
+        if (!temp) {
+            return res.status(404).json({ mssg: 'Email or OTP does not match' })
+        }
+
+        await users.create({
+            email: temp.email,
+            password: temp.password
+        })
+
+        await temp_user.deleteOne({ email: temp.email })
+
+        const token = generate_token(decoded, '12h')
+
+        return res.status(202).cookie('token', token, {
+            httpOnly: true,
+            sameSite: 'Lax', // Allows localhost usage
+            secure: false,   // Set to TRUE only if you are using HTTPS
+            maxAge: 1000 * 60 * 60 * 12
+        }).json({ mssg: 'Login Successful' })
 
     }
     catch (err) {
         console.log('Error', err)
     }
-
 }
 
-
-export const validate_otp = async(req, res) => {
-
-    try{
-
-        const data = req.body
-
-        if(!validate_token(req.cookies.token))
-        {
-            return res.status(401).json({mssg: 'OTP expired'})
-        }
-
-        const decoded = decoded_token(req.cookies.token)
-
-        const temp = await temp_user.findOne({email: decoded.email, otp: data.otp});
-
-        if(!temp)
-        {
-            return res.status(404).json({mssg: 'Email or OTP does not match'})
-        }
-
-        await userTable.create({
-            email: temp.email,
-            password: temp.password
-        })
-
-        const token = generate_token(data, '12h')
-
-        return res.status(202).cookie('token', token, {
-            httpOnly: true,
-            secure: true,
-            sameSite: 'None',
-            maxAge: 1000 * 60 * 60 * 12
-        }).json({mssg: 'Login Successful'})
-
-    }
-    catch(err)
-    {
-        console.log('Error',err)
-    }
-}
 
 export const resend_otp = async (req, res) => {
 
@@ -130,42 +132,60 @@ export const resend_otp = async (req, res) => {
 
         const data = req.body
 
-        const decoded = decoded_token(req.cookies.token)
+        const decoded = decoded_token(req.cookies.temp_token)
 
-        const temp = await temp_user.findOne({email: decoded.email});
+        const temp = await temp_user.findOne({ email: decoded.email });
 
-        if(!temp)
-        {
-            return res.status(404).json({mssg: 'Email does not exist'})
+        if (!temp) {
+            return res.status(404).json({ mssg: 'Email does not exist' })
         }
 
         const otp = generate_otp();
 
         await send_otp(otp);
-        
-        await temp_user.updateOne({
-            email: data.email
-        },
-        {
-            $set: {
-                otp: otp
-            }
-        })
-        
-        const token = generate_token(data, '5m')
 
-        return res.status(200).cookie('temp_token', token,{
+        await temp_user.updateOne({
+            email: decoded.email
+        },
+            {
+                $set: {
+                    otp: otp
+                }
+            })
+
+        const token = generate_token(decoded, '5m')
+
+        return res.status(200).cookie('temp_token', token, {
             httpOnly: true,
-            secure: true,
-            sameSite: 'None',
+            sameSite: 'Lax', // Allows localhost usage
+            secure: false,   // Set to TRUE only if you are using HTTPS
             maxAge: 1000 * 60 * 30
-        }).json('Enter OTP')
+        }).json({ mssg: 'New OTP sent' })
 
     }
     catch (err) {
         console.log('Error', err)
+
+        return res.status(501).json({ mssg: 'Some Error Occured' })
     }
 
 }
 
 
+export const validate_login = async (req, res) => {
+
+    try {
+
+        if (!validate_token(req.cookies.token)) {
+            return res.status(401).json({ mssg: 'Invalid Login' })
+        }
+
+        return res.status(200).json({ mssg: 'Valid Login' })
+
+    }
+    catch (err) {
+        console.log('Error', err)
+
+        return res.status(501).json({ mssg: 'Invalid Login' })
+    }
+}   

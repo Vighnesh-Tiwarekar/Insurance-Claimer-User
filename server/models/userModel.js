@@ -16,7 +16,7 @@ const userSchema = new mongoose.Schema(
     },
     {
         timestamps: true,
-        collection: 'userTable'
+        collection: 'users'
     });
 
 
@@ -44,6 +44,6 @@ const temp_userSchema = new mongoose.Schema({
     collection: 'temp_user'
 })
 
-export const userTable = new mongoose.model('userTable', userSchema);
+export const users = new mongoose.model('users', userSchema);
 
 export const temp_user = new mongoose.model('temp_user', temp_userSchema);

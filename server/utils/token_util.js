@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken'
 
-export const generate_token = async(data, age) => {
+export const generate_token = (data, age) => {
 
     try{
 
@@ -8,7 +8,8 @@ export const generate_token = async(data, age) => {
             email: data.email
         }
 
-        const token = jwt.sign(payload, process.env.SECRET_KEY, { expiresIn: '12h'})
+        const token = jwt.sign(payload, process.env.SECRET_KEY, { expiresIn: age})
+
 
         return token;
 

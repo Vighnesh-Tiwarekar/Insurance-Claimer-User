@@ -4,16 +4,32 @@ import { Router } from './routes/Router'
 import { AuthContext } from './context/AuthContext'
 import { useEffect, useState } from 'react'
 import { LoadingPage } from './pages/LoadingPage'
+import { validate_login } from './functions/login_functions'
 
 function App() {
 
-  const [login, setlogin] = useState(0)
+  const [login, setlogin] = useState(false)
 
-  const [isloading, setLoading] = useState(false)
+  const [isloading, setLoading] = useState(true)
 
   useEffect(() => {
+    
+    const checkAuth = async () => {
 
+      const check_login = await validate_login()
+
+      if (check_login) {
+        setlogin(true)
+      } else {
+        setlogin(false)
+      }
+
+      setLoading(false)
+    }
+
+    checkAuth()
   }, [])
+
 
   if (isloading) {
     return (

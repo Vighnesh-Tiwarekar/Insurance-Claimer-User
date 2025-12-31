@@ -20,7 +20,7 @@ export const validate_pass = async (hashed_pass, password) => {
 
     try{
         
-        return await bcrypt.compare(hashed_pass, password);
+        return await bcrypt.compare( password , hashed_pass);
     }
     catch(err)
     {

@@ -1,4 +1,4 @@
-import { resend_otp, sign_in, sign_up, validate_otp } from "../controllers/login_controller";
+import { resend_otp, sign_in, sign_up, validate_login, validate_otp } from "../controllers/login_controller.js";
 import express from 'express'
 
 
@@ -11,3 +11,7 @@ loginrouter.post('/sign-up', sign_up);
 loginrouter.post('/validate-otp', validate_otp);
 
 loginrouter.post('/resend-otp', resend_otp);
+
+loginrouter.post('/validate-login', validate_login)
+
+export default loginrouter;
