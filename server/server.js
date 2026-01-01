@@ -4,6 +4,8 @@ import cors from 'cors';
 import cookieParser from "cookie-parser";
 import { connectDB } from "./config/database.js";
 import loginrouter from "./routes/loginroute.js";
+import { validate_user } from "./middleware/validate_user.js";
+import profilerouter from "./routes/profileroute.js";
 
 
 dotenv.config();
@@ -29,6 +31,8 @@ app.use(urlencoded({extended: false}))
 connectDB();
 
 app.use('/apis/insur-claimer/login', loginrouter)
+
+app.use('/apis/insur-claimer/profile', validate_user , profilerouter)
 
 app.listen(port, () => {
     console.log(port)

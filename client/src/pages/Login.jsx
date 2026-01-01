@@ -2,7 +2,8 @@ import React, { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { Navigate, useNavigate } from "react-router-dom";
 import '../css/pages_css/Login.css';
-import { resend_otp, sign_in, sign_up, validate_otp } from "../functions/login_functions";
+import { resend_otp, sign_in, sign_out, sign_up, validate_otp } from "../functions/login_functions";
+import { useEffect } from "react";
 
 const LoginForm = ({ method, setmethod, setisOTP, loginContext, navigate }) => {
 
@@ -133,10 +134,18 @@ const OTPForm = ({ loginContext, navigate, setisOTP }) => {
 };
 
 export const Login = () => {
+
+  const loginContext = useContext(AuthContext);
+
+  useEffect(()=>{
+
+    sign_out(loginContext)
+    
+  },[])
+
   const [method, setmethod] = useState(0);
   const [isOTP, setisOTP] = useState(false);
 
-  const loginContext = useContext(AuthContext);
   const navigate = useNavigate();
 
   return (

@@ -9,7 +9,7 @@ export const sign_in = async (req, res) => {
 
         const data = req.body;
 
-        const user = await users.findOne({ email: data.email })
+        const user = await users.findOne({ email: data.email }).lean()
 
         if (!user) {
             return res.status(404).json({ mssg: 'Email not found' })
@@ -23,6 +23,7 @@ export const sign_in = async (req, res) => {
                 httpOnly: true,
                 sameSite: 'Lax', // Allows localhost usage
                 secure: false,   // Set to TRUE only if you are using HTTPS
+                path: '/',
                 maxAge: 1000 * 60 * 60 * 12
             }).json({ mssg: 'Login Successful' })
 
@@ -33,6 +34,8 @@ export const sign_in = async (req, res) => {
     }
     catch (err) {
         console.log('Error', err)
+
+        return res.status(501).json({ mssg: 'Some Error Occured' })
     }
 
 }
@@ -73,6 +76,7 @@ export const sign_up = async (req, res) => {
             httpOnly: true,
             sameSite: 'Lax', // Allows localhost usage
             secure: false,   // Set to TRUE only if you are using HTTPS
+            path: '/',
             maxAge: 1000 * 60 * 30
         }).json({ mssg: 'Enter OTP' })
 
@@ -116,12 +120,14 @@ export const validate_otp = async (req, res) => {
             httpOnly: true,
             sameSite: 'Lax', // Allows localhost usage
             secure: false,   // Set to TRUE only if you are using HTTPS
+            path: '/',
             maxAge: 1000 * 60 * 60 * 12
         }).json({ mssg: 'Login Successful' })
 
     }
     catch (err) {
         console.log('Error', err)
+        return res.status(501).json({ mssg: 'Some Error Occured' })
     }
 }
 
@@ -159,6 +165,7 @@ export const resend_otp = async (req, res) => {
             httpOnly: true,
             sameSite: 'Lax', // Allows localhost usage
             secure: false,   // Set to TRUE only if you are using HTTPS
+            path: '/',
             maxAge: 1000 * 60 * 30
         }).json({ mssg: 'New OTP sent' })
 
@@ -188,4 +195,22 @@ export const validate_login = async (req, res) => {
 
         return res.status(501).json({ mssg: 'Invalid Login' })
     }
-}   
+}
+
+export const sign_out = async (req, res) => {
+
+    try {
+
+        res.status(201).clearCookie('token', {
+            httpOnly: true,
+            sameSite: 'Lax',
+            secure: false,
+            path: '/'
+        }).json({ mssg: 'Sign Out successful' })
+
+    }
+    catch (err) {
+        console.log(err)
+        return res.status(501).json({ mssg: 'Some Error Occured' })
+    }
+}
