@@ -30,8 +30,6 @@ export const post_profile = async (req, res) => {
 
     try {
 
-        console.log('post')
-
         const data = req.body.data
 
         const decoded = decoded_token(req.cookies.token);
@@ -61,8 +59,6 @@ export const post_profile = async (req, res) => {
 export const patch_profile = async (req, res) => {
 
     try {
-
-        console.log('patch')
 
         const data = req.body.data
 

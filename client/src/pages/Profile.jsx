@@ -22,13 +22,14 @@ export const Profile = () => {
   useEffect(() => {
 
     if (data && data.status==true) {
+
       setFormData({
         name: data.prof.name,
-        phone: data.prof.phone,
+        phone: parseInt(data.prof.phone),
         email: data.prof.email,
-        adhaar: data.prof.adhaar,
+        adhaar: parseInt(data.prof.adhaar),
         license: data.prof.license,
-        past_claims: data.prof.past_claims,
+        past_claims: parseInt(data.prof.past_claims),
         address: data.prof.address
       });
     }

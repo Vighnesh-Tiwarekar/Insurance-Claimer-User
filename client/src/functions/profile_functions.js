@@ -26,8 +26,6 @@ export const post_profile = async (formData) => {
 
     try {
 
-        console.log('ost')
-
         const res = await axios.post(`${import.meta.env.VITE_BASE_API_URL}/profile/create-profile`,
             {
                 data: formData
@@ -52,8 +50,6 @@ export const post_profile = async (formData) => {
 export const patch_profile = async (formData) => {
 
     try {
-
-        console.log('atch')
 
         const res = await axios.patch(`${import.meta.env.VITE_BASE_API_URL}/profile/update-profile`,
             {

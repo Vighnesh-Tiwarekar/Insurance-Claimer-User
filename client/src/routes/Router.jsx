@@ -5,6 +5,10 @@ import { ProtectedRoutes } from './ProtectedRoutes'
 import { Home } from '../pages/Home'
 import { Profile } from '../pages/Profile'
 import { RootLayout } from '../layout/RootLayout'
+import { SelectType } from '../pages/SelectType'
+import { HealthInsForm } from '../pages/HealthInsForm'
+import { TravelInsForm } from '../pages/TravelInsForm'
+import { VehicleInsForm } from '../pages/VehicleInsForm'
 
 export const Router = createBrowserRouter([
     {
@@ -26,6 +30,26 @@ export const Router = createBrowserRouter([
                     {
                         path: '/profile',
                         element: <Profile></Profile>
+                    },
+
+                    {
+                        path: '/select',
+                        element: <SelectType></SelectType>
+                    },
+
+                    {
+                        path: '/health',
+                        element: <HealthInsForm></HealthInsForm>
+                    },
+
+                    {
+                        path: '/travel',
+                        element: <TravelInsForm></TravelInsForm>
+                    },
+
+                    {
+                        path: 'vehicle',
+                        element: <VehicleInsForm></VehicleInsForm>
                     }
                 ]
             }

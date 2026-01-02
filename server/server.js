@@ -6,6 +6,7 @@ import { connectDB } from "./config/database.js";
 import loginrouter from "./routes/loginroute.js";
 import { validate_user } from "./middleware/validate_user.js";
 import profilerouter from "./routes/profileroute.js";
+import claimrouter from './routes/claimroute.js'
 
 
 dotenv.config();
@@ -33,6 +34,8 @@ connectDB();
 app.use('/apis/insur-claimer/login', loginrouter)
 
 app.use('/apis/insur-claimer/profile', validate_user , profilerouter)
+
+app.use('/apis/insur-claimer/claim', validate_user, claimrouter)
 
 app.listen(port, () => {
     console.log(port)
