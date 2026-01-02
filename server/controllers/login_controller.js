@@ -42,7 +42,7 @@ export const sign_in = async (req, res) => {
 
 
 export const sign_up = async (req, res) => {
-
+    
     try {
 
         const data = req.body
@@ -95,7 +95,13 @@ export const validate_otp = async (req, res) => {
 
         const data = req.body
 
+        if (!req.cookies.temp_token) {
+            console.log('No temp_token cookie found');
+            return res.status(401).json({ mssg: 'Session expired. Please sign up again.' })
+        }
+
         if (!validate_token(req.cookies.temp_token)) {
+            console.log('Token validation failed');
             return res.status(401).json({ mssg: 'OTP expired' })
         }
 

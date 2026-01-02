@@ -4,6 +4,8 @@ import { Navigate, useNavigate } from "react-router-dom";
 import '../css/pages_css/Login.css';
 import { resend_otp, sign_in, sign_out, sign_up, validate_otp } from "../functions/login_functions";
 import { useEffect } from "react";
+import LeftSection from "../components/LeftSection";
+
 
 const LoginForm = ({ method, setmethod, setisOTP, loginContext, navigate }) => {
 
@@ -24,7 +26,10 @@ const LoginForm = ({ method, setmethod, setisOTP, loginContext, navigate }) => {
   };
 
   return (
+    <div className="page">
+      {/* <LeftSection /> */}
     <div className="login-signup-form">
+      
       <div className="login-tabs">
         <div
           className={`login-tab ${!method ? 'active' : ''}`}
@@ -66,6 +71,7 @@ const LoginForm = ({ method, setmethod, setisOTP, loginContext, navigate }) => {
           {Mssg}
         </div>
       </div>
+    </div>
     </div>
   );
 };

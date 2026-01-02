@@ -1,4 +1,5 @@
 import axios from 'axios'
+// import { connect } from 'mongoose';
 
 export const validate_login = async () => {
 
@@ -27,6 +28,8 @@ export const validate_login = async () => {
 export const sign_up = async (setisOTP, setMssg) => {
 
     try {
+        console.log("tmks")
+        
         const email = document.getElementById('email').value
         const ps = document.getElementById('password').value
 
@@ -71,7 +74,7 @@ export const resend_otp = async (setMsg) => {
     }
     catch (err) {
         console.log(err)
-        setMssg(err.response.data.mssg)
+        setMsg(err.response.data.mssg)
     }
 }
 
@@ -101,7 +104,7 @@ export const validate_otp = async (loginContext, navigate, setMsg) => {
     }
     catch (err) {
         console.log(err)
-        setMssg(err.response.data.mssg)
+        setMsg(err.response.data.mssg)
     }
 
 }

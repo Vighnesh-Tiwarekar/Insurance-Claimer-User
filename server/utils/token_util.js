@@ -24,13 +24,15 @@ export const validate_token = (token) => {
 
     try
     {
+        console.log('Validating token with SECRET_KEY:', process.env.SECRET_KEY ? 'exists' : 'MISSING');
+        // console.log('Token received:', token);
         const decoded = jwt.verify(token, process.env.SECRET_KEY)
-
+        console.log('Token validated successfully');
         return true;
     }
     catch(err)
     {
-        console.log(err)
+        console.log('Token validation error:', err.message)
 
         return false;
     }

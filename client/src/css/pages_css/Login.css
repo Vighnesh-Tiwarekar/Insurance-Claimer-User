@@ -5,11 +5,19 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: rgb(187, 218, 178);
+    background-color: rgb(228, 228, 228);
     padding: 20px;
-
-    border: 10px solid black;
 }
+
+@media (min-width: 880px) {
+    .login-signup-form{
+        flex: 1;
+        width: 100vw;
+    }
+}
+
+
+
 
 /* Tab Container */
 .login-tabs {
