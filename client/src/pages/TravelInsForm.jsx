@@ -3,22 +3,37 @@ import { post_travelform } from '../functions/claim_functions'
 
 export const TravelInsForm = () => {
 
+    // 1. Updated state to handle specific files and travel type
     const [formData, setFormData] = useState({
         company: '',
         policy: '',
         incident_date: '',
         claim: '',
         user_story: '',
-        documents: []
+        travel_type: '', // 'Domestic' or 'International'
+        ticket_file: null,
+        passport_file: null,
+        visa_file: null
     })
+
+    const insuranceCompanies = [
+        "HDFC Ergo",
+        "ICICI Lombard",
+        "Bajaj Allianz",
+        "Tata AIG",
+        "Digit Insurance",
+        "Acko",
+        "Other"
+    ];
 
     const handleChange = (e, name) => {
         setFormData((prev) => ({ ...prev, [name]: e.target.value }))
     }
 
-    const handleFileChange = (e) => {
-        const files = Array.from(e.target.files)
-        setFormData((prev) => ({ ...prev, documents: files }))
+    // 2. Updated file handler to accept specific field names
+    const handleFileChange = (e, name) => {
+        const file = e.target.files[0] ? e.target.files[0] : null;
+        setFormData((prev) => ({ ...prev, [name]: file }))
     }
 
     const handleSubmit = (e) => {
@@ -26,16 +41,23 @@ export const TravelInsForm = () => {
 
         const dataPayload = new FormData();
 
+        // Append text fields
         Object.keys(formData).forEach((key) => {
-            if (key === 'documents') {
-                return;
+            if (key.includes('_file')) {
+                return; // Skip file keys here
             }
             dataPayload.append(key, formData[key]);
         });
 
-        formData.documents.forEach((file) => {
-            dataPayload.append('documents', file);
-        });
+        // 3. Logic to append files based on Travel Type
+        if (formData.ticket_file) {
+            dataPayload.append('ticket_file', formData.ticket_file);
+        }
+
+        if (formData.travel_type === 'International') {
+            if (formData.passport_file) dataPayload.append('passport_file', formData.passport_file);
+            if (formData.visa_file) dataPayload.append('visa_file', formData.visa_file);
+        }
 
         post_travelform(dataPayload)
             .then(() => alert("Travel claim submitted!"))
@@ -50,13 +72,17 @@ export const TravelInsForm = () => {
 
                 <div>
                     <div>Company</div>
-                    <input
-                        type="text"
-                        className='border-2 w-full p-2'
+                    <select
+                        className='border-2 w-full p-2 bg-white'
                         onChange={(e) => handleChange(e, 'company')}
                         value={formData.company}
                         required
-                    />
+                    >
+                        <option value="" disabled>Select Insurance Company</option>
+                        {insuranceCompanies.map((comp) => (
+                            <option key={comp} value={comp}>{comp}</option>
+                        ))}
+                    </select>
                 </div>
 
                 <div>
@@ -68,6 +94,21 @@ export const TravelInsForm = () => {
                         value={formData.policy}
                         required
                     />
+                </div>
+
+                {/* 4. Travel Type Dropdown */}
+                <div>
+                    <div>Travel Type</div>
+                    <select
+                        className='border-2 w-full p-2 bg-white'
+                        onChange={(e) => handleChange(e, 'travel_type')}
+                        value={formData.travel_type}
+                        required
+                    >
+                        <option value="" disabled>Select Travel Type</option>
+                        <option value="Domestic">Domestic</option>
+                        <option value="International">International</option>
+                    </select>
                 </div>
 
                 <div>
@@ -107,19 +148,43 @@ export const TravelInsForm = () => {
                     ></textarea>
                 </div>
 
+                {/* 5. Conditional File Inputs */}
+
+                {/* Always Show Ticket */}
                 <div>
-                    <div>Images (Tickets/Boarding Pass/Bills)</div>
+                    <div>Travel Ticket (Image/PDF)</div>
                     <input
                         type="file"
-                        multiple
                         className='border-2 w-full p-2'
-                        onChange={handleFileChange}
+                        onChange={(e) => handleFileChange(e, 'ticket_file')}
                         required
                     />
-                    <p className='text-sm text-gray-500 mt-1'>
-                        Selected files: {formData.documents.length}
-                    </p>
                 </div>
+
+                {/* Only Show Passport & Visa if International */}
+                {formData.travel_type === 'International' && (
+                    <>
+                        <div>
+                            <div>Passport Copy (Image/PDF)</div>
+                            <input
+                                type="file"
+                                className='border-2 w-full p-2'
+                                onChange={(e) => handleFileChange(e, 'passport_file')}
+                                required
+                            />
+                        </div>
+
+                        <div>
+                            <div>Visa Copy (Image/PDF)</div>
+                            <input
+                                type="file"
+                                className='border-2 w-full p-2'
+                                onChange={(e) => handleFileChange(e, 'visa_file')}
+                                required
+                            />
+                        </div>
+                    </>
+                )}
 
                 <button type="submit" className='submit-btn'>
                     Submit Claim

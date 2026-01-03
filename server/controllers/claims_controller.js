@@ -55,7 +55,17 @@ export const post_health = async (req, res) => {
         } = req.body;
 
 
-        const filePaths = req.files ? req.files.map(file => file.path) : [];
+        // --- CHANGED LOGIC START ---
+        // Access specific files by their field names
+        // req.files is an object where keys are the field names
+        
+        const billFile = req.files['medical_bill'] ? req.files['medical_bill'][0] : null;
+        const reportFile = req.files['medical_report'] ? req.files['medical_report'][0] : null;
+
+        if (!billFile || !reportFile) {
+            return res.status(400).json({ mssg: 'Both Medical Bill and Report are required' });
+        }
+        // --- CHANGED LOGIC END ---
 
         await healthIns.create({
             userID: user._id,
@@ -70,7 +80,12 @@ export const post_health = async (req, res) => {
             ailment: ailment,
             claim_amount: claim,      
             user_story: user_story,
-            image_url: filePaths      
+            
+            // --- CHANGED FIELDS START ---
+            // Save specific paths to the new schema fields
+            medical_bill_url: billFile.path,
+            medical_report_url: reportFile.path
+            // --- CHANGED FIELDS END ---
         });
 
         return res.status(202).json({ 
@@ -98,12 +113,14 @@ export const post_vehicle = async (req, res) => {
         const { 
             company, 
             policy,        
-            incident_date, 
+            incident_date,
+            wheeler_type,   // <--- NEW FIELD ADDED HERE
             driver_name, 
             driver_license, 
             vehicle_no, 
             claim,         
-            user_story 
+            user_story,
+            damage_desc 
         } = req.body;
 
        
@@ -114,12 +131,14 @@ export const post_vehicle = async (req, res) => {
             type: 'Vehicle',
             company: company,
             policy_no: policy,
+            wheeler_type: wheeler_type, // <--- NEW FIELD MAPPED HERE
             incident_date: incident_date,
             driver_name: driver_name,
             driver_license: driver_license,
             vehicle_no: vehicle_no,
             claim_amount: claim,
             user_story: user_story,
+            damage_desc: damage_desc,
             image_url: filePaths,
             status: 'Pending'
         });
@@ -139,7 +158,6 @@ export const post_travel = async (req, res) => {
 
     try {
         
-        
         const decoded = decoded_token(req.cookies.token);
         const user = await users.findOne({ email: decoded.email }).lean();
 
@@ -147,16 +165,31 @@ export const post_travel = async (req, res) => {
             return res.status(404).json({ mssg: 'User not found' });
         }
 
-        
         const { 
             company, 
             policy,        
             incident_date, 
             claim,          
-            user_story 
+            user_story,
+            travel_type 
         } = req.body;
 
-        const filePaths = req.files ? req.files.map(file => file.path) : [];
+        const ticketFile = req.files['ticket_file'] ? req.files['ticket_file'][0] : null;
+        const passportFile = req.files['passport_file'] ? req.files['passport_file'][0] : null;
+        const visaFile = req.files['visa_file'] ? req.files['visa_file'][0] : null;
+
+        
+        if (!ticketFile) {
+            return res.status(400).json({ mssg: 'Travel Ticket is required' });
+        }
+
+        
+        if (travel_type === 'International') {
+            if (!passportFile || !visaFile) {
+                return res.status(400).json({ mssg: 'Passport and Visa are required for International Travel' });
+            }
+        }
+        
 
         await travelIns.create({
             userID: user._id,
@@ -166,8 +199,14 @@ export const post_travel = async (req, res) => {
             incident_date: incident_date,
             claim_amount: claim,
             user_story: user_story,
-            image_url: filePaths,
-            status: 'Pending'
+            status: 'Pending',
+
+            
+            travel_type: travel_type,
+            ticket_url: ticketFile.path,
+            
+            passport_url: passportFile ? passportFile.path : null,
+            visa_url: visaFile ? visaFile.path : null
         });
 
         return res.status(202).json({ 

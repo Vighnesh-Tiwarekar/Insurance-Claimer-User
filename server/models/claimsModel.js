@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 
-
 const healthInsSchema = new mongoose.Schema({
 
     userID: {
@@ -64,8 +63,13 @@ const healthInsSchema = new mongoose.Schema({
         required: true
     },
 
-    image_url: {
-        type: [String],
+    medical_bill_url: {
+        type: String,
+        required: true
+    },
+
+    medical_report_url: {
+        type: String,
         required: true
     },
 
@@ -81,10 +85,11 @@ const healthInsSchema = new mongoose.Schema({
     }
 
 },
-    {
-        timestamps: true,
-        collection: 'healthIns'
-    });
+{
+    timestamps: true,
+    collection: 'healthIns'
+});
+
 
 const vehicleInsSchema = new mongoose.Schema({
 
@@ -105,6 +110,11 @@ const vehicleInsSchema = new mongoose.Schema({
     },
 
     policy_no: {
+        type: String,
+        required: true
+    },
+
+    wheeler_type: {
         type: String,
         required: true
     },
@@ -144,6 +154,11 @@ const vehicleInsSchema = new mongoose.Schema({
         required: true
     },
 
+    damage_desc: {
+        type: String,
+        required: true
+    },
+
     status: {
         type: String,
         enum: ['Pending', 'Under Review', 'Approved', 'Rejected'],
@@ -151,14 +166,15 @@ const vehicleInsSchema = new mongoose.Schema({
     },
 
     admin_comment: {
-        type: String, default: ""
+        type: String, 
+        default: ""
     }
 
 },
-    {
-        timestamps: true,
-        collection: 'vehicleIns'
-    });
+{
+    timestamps: true,
+    collection: 'vehicleIns'
+});
 
 const travelInsSchema = new mongoose.Schema({
 
@@ -183,6 +199,12 @@ const travelInsSchema = new mongoose.Schema({
         required: true
     },
 
+    travel_type: {
+        type: String,
+        enum: ['Domestic', 'International'],
+        required: true
+    },
+
     incident_date: {
         type: Date,
         required: true
@@ -193,14 +215,24 @@ const travelInsSchema = new mongoose.Schema({
         required: true
     },
 
-    image_url: {
-        type: [String],
-        required: true
-    },
-
     user_story: {
         type: String,
         required: true
+    },
+
+    ticket_url: {
+        type: String,
+        required: true
+    },
+
+    passport_url: {
+        type: String,
+        default: null
+    },
+
+    visa_url: {
+        type: String,
+        default: null
     },
 
     status: {
@@ -210,14 +242,15 @@ const travelInsSchema = new mongoose.Schema({
     },
 
     admin_comment: {
-        type: String, default: ""
+        type: String, 
+        default: ""
     }
 
 },
-    {
-        timestamps: true,
-        collection: 'travelIns'
-    })
+{
+    timestamps: true,
+    collection: 'travelIns'
+});
 
 export const healthIns = new mongoose.model('healthIns', healthInsSchema)
 

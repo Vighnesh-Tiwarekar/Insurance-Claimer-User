@@ -3,6 +3,7 @@ import { post_healthform } from '../functions/claim_functions'
 
 export const HealthInsForm = () => {
 
+    // 1. Updated state to hold specific file fields instead of an array
     const [formData, setFormData] = useState({
         company: '',
         policy: '',
@@ -14,40 +15,44 @@ export const HealthInsForm = () => {
         ailment: '',
         claim: '',
         user_story: '',
-        documents: []
+        medical_bill: null,   // Single file
+        medical_report: null  // Single file
     })
 
+    // List of companies for the dropdown
+    const insuranceCompanies = [
+        "Star Health",
+        "HDFC Ergo",
+        "ICICI Lombard",
+        "Bajaj Allianz",
+        "Niva Bupa",
+        "Other"
+    ];
 
     const handleChange = (e, name) => {
         setFormData((prev) => ({ ...prev, [name]: e.target.value }))
     }
 
-    const handleFileChange = (e) => {
-
-        const files = Array.from(e.target.files)
-        setFormData((prev) => ({ ...prev, documents: files }))
+    // 2. Updated file handler to take the field name and single file
+    const handleFileChange = (e, name) => {
+        const file = e.target.files[0] ? e.target.files[0] : null;
+        setFormData((prev) => ({ ...prev, [name]: file }))
     }
 
     const handleSubmit = (e) => {
-
         e.preventDefault()
 
         const dataPayload = new FormData();
 
+        // 3. Simplified append logic
         Object.keys(formData).forEach((key) => {
-            if (key === 'documents') {
-
-                return;
+            // Only append if the value exists (prevents appending "null" string)
+            if (formData[key]) {
+                dataPayload.append(key, formData[key]);
             }
-            dataPayload.append(key, formData[key]);
-        });
-
-        formData.documents.forEach((file) => {
-            dataPayload.append('documents', file);
         });
 
         post_healthform(dataPayload)
-
     }
 
     return (
@@ -56,15 +61,20 @@ export const HealthInsForm = () => {
 
             <form className='w-full max-w-lg mx-auto mt-10 flex flex-col gap-4' onSubmit={handleSubmit}>
 
+                {/* 4. Company Field changed to Dropdown */}
                 <div>
                     <div>Company</div>
-                    <input
-                        type="text"
-                        className='border-2 w-full p-2'
+                    <select
+                        className='border-2 w-full p-2 bg-white'
                         onChange={(e) => handleChange(e, 'company')}
                         value={formData.company}
                         required
-                    />
+                    >
+                        <option value="" disabled>Select Insurance Company</option>
+                        {insuranceCompanies.map((comp) => (
+                            <option key={comp} value={comp}>{comp}</option>
+                        ))}
+                    </select>
                 </div>
 
                 <div>
@@ -167,19 +177,38 @@ export const HealthInsForm = () => {
                     ></textarea>
                 </div>
 
+                {/* 5. Split File Inputs */}
+                
+                {/* Field A: Medical Bill */}
                 <div>
-                    <div>Image/Documents (Bills/Medical Report)</div>
-
+                    <div>Medical Bill (Image/PDF)</div>
                     <input
                         type="file"
-                        multiple
                         className='border-2 w-full p-2'
-                        onChange={handleFileChange}
+                        onChange={(e) => handleFileChange(e, 'medical_bill')}
                         required
                     />
-                    <p className='text-sm text-gray-500 mt-1'>
-                        Selected files: {formData.documents.length}
-                    </p>
+                    {formData.medical_bill && (
+                        <p className='text-xs text-green-600 mt-1'>
+                            Selected: {formData.medical_bill.name}
+                        </p>
+                    )}
+                </div>
+
+                {/* Field B: Medical Report */}
+                <div>
+                    <div>Medical Report (Image/PDF)</div>
+                    <input
+                        type="file"
+                        className='border-2 w-full p-2'
+                        onChange={(e) => handleFileChange(e, 'medical_report')}
+                        required
+                    />
+                    {formData.medical_report && (
+                        <p className='text-xs text-green-600 mt-1'>
+                            Selected: {formData.medical_report.name}
+                        </p>
+                    )}
                 </div>
 
                 <button type="submit" className='submit-btn'>

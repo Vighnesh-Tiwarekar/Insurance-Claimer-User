@@ -8,10 +8,17 @@ const claimrouter = express.Router();
 
 claimrouter.get('/get-claims', get_claims)
 
-claimrouter.post('/health-claim', upload.array('documents', 5) ,  post_health)
+claimrouter.post('/health-claim', upload.fields([
+    { name: 'medical_bill', maxCount: 1 },
+    { name: 'medical_report', maxCount: 1 }
+]), post_health);
 
 claimrouter.post('/vehicle-claim', upload.array('documents', 5) , post_vehicle)
 
-claimrouter.post('/travel-claim', upload.array('documents', 5) , post_travel)
+claimrouter.post('/travel-claim', upload.fields([
+    { name: 'ticket_file', maxCount: 1 },
+    { name: 'passport_file', maxCount: 1 },
+    { name: 'visa_file', maxCount: 1 }
+]), post_travel);
 
 export default claimrouter;
