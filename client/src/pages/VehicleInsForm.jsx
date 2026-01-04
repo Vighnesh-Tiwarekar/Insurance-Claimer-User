@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { post_vehicleform } from '../functions/claim_functions'
+import '../css/pages_css/Profile.css'
 
 export const VehicleInsForm = () => {
 
@@ -67,16 +68,16 @@ export const VehicleInsForm = () => {
     }
 
     return (
-        <>
-            <div className='w-fit mx-auto text-xl font-bold mt-5'>Vehicle Insurance Claim</div>
+        <div className='form-container'>
+            <div className='profile-heading'>Vehicle Insurance Claim</div>
 
-            <form className='w-full max-w-lg mx-auto mt-10 flex flex-col gap-4' onSubmit={handleSubmit}>
+            <form className='profile-form' onSubmit={handleSubmit}>
 
                 {/* Company Dropdown */}
-                <div>
-                    <div>Company</div>
+                <div className='fields'>
+                    <label>Company</label>
                     <select
-                        className='border-2 w-full p-2 bg-white'
+                        className='field-input'
                         onChange={(e) => handleChange(e, 'company')}
                         value={formData.company}
                         required
@@ -88,11 +89,11 @@ export const VehicleInsForm = () => {
                     </select>
                 </div>
 
-                <div>
-                    <div>Policy No.</div>
+                <div className='fields'>
+                    <label>Policy No.</label>
                     <input
                         type="text"
-                        className='border-2 w-full p-2'
+                        className='field-input'
                         onChange={(e) => handleChange(e, 'policy')}
                         value={formData.policy}
                         required
@@ -100,10 +101,10 @@ export const VehicleInsForm = () => {
                 </div>
 
                 {/* New Wheeler Type Field */}
-                <div>
-                    <div>Vehicle Type</div>
+                <div className='fields'>
+                    <label>Vehicle Type</label>
                     <select
-                        className='border-2 w-full p-2 bg-white'
+                        className='field-input'
                         onChange={(e) => handleChange(e, 'wheeler_type')}
                         value={formData.wheeler_type}
                         required
@@ -115,65 +116,65 @@ export const VehicleInsForm = () => {
                     </select>
                 </div>
 
-                <div>
-                    <div>Incident Date</div>
+                <div className='fields'>
+                    <label>Incident Date</label>
                     <input
                         type="date"
-                        className='border-2 w-full p-2'
+                        className='field-input'
                         onChange={(e) => handleChange(e, 'incident_date')}
                         value={formData.incident_date}
                         required
                     />
                 </div>
 
-                <div>
-                    <div>Driver Name</div>
+                <div className='fields'>
+                    <label>Driver Name</label>
                     <input
                         type="text"
-                        className='border-2 w-full p-2'
+                        className='field-input'
                         onChange={(e) => handleChange(e, 'driver_name')}
                         value={formData.driver_name}
                         required
                     />
                 </div>
 
-                <div>
-                    <div>Driver License No.</div>
+                <div className='fields'>
+                    <label>Driver License No.</label>
                     <input
                         type="text"
-                        className='border-2 w-full p-2'
+                        className='field-input'
                         onChange={(e) => handleChange(e, 'driver_license')}
                         value={formData.driver_license}
                         required
                     />
                 </div>
 
-                <div>
-                    <div>Vehicle Number</div>
+                <div className='fields'>
+                    <label>Vehicle Number</label>
                     <input
                         type="text"
-                        className='border-2 w-full p-2'
+                        className='field-input'
                         onChange={(e) => handleChange(e, 'vehicle_no')}
                         value={formData.vehicle_no}
                         required
                     />
                 </div>
 
-                <div>
-                    <div>Claim Amount</div>
+                <div className='fields'>
+                    <label>Claim Amount</label>
                     <input
                         type="number"
-                        className='border-2 w-full p-2'
+                        className='field-input'
                         onChange={(e) => handleChange(e, 'claim')}
                         value={formData.claim}
                         required
                     />
                 </div>
 
-                <div>
-                    <div>Incident Description (User Story)</div>
+                <div className='fields'>
+                    <label>Incident Description (User Story)</label>
                     <textarea
-                        className='border-2 w-full p-2'
+                        className='field-input'
                         onChange={(e) => handleChange(e, 'user_story')}
                         value={formData.user_story}
                         required
@@ -181,16 +182,16 @@ export const VehicleInsForm = () => {
                     ></textarea>
                 </div>
 
-                <div>
-                    <div>Images (Damage/Accident Photos)</div>
+                <div className='fields'>
+                    <label>Images (Damage/Accident Photos)</label>
                     <input
                         type="file"
                         multiple
-                        className='border-2 w-full p-2'
+                        className='field-input'
                         onChange={handleFileChange}
                         required
                     />
-                    <p className='text-sm text-gray-500 mt-1'>
+                    <p style={{fontSize: '14px', color: '#666', marginTop: '5px'}}>
                         Selected files: {formData.documents.length}
                     </p>
                 </div>
@@ -200,6 +201,6 @@ export const VehicleInsForm = () => {
                 </button>
 
             </form>
-        </>
+        </div>
     )
 }

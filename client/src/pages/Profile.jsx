@@ -3,6 +3,8 @@ import "../css/pages_css/Profile.css";
 import { useProfile } from "../hooks/useProfile";
 import { LoadingPage } from '../pages/LoadingPage.jsx'
 import { patch_profile, post_profile } from "../functions/profile_functions.js";
+import Alert from '@mui/material/Alert';
+import Stack from '@mui/material/Stack';
 
 export const Profile = () => {
 
@@ -17,6 +19,8 @@ export const Profile = () => {
     past_claims: '',
     address: ''
   });
+
+  const [alert, setAlert] = useState({ show: false, type: '', message: '' });
 
 
   useEffect(() => {
@@ -59,9 +63,25 @@ export const Profile = () => {
 
     if (!data.status) {
       post_profile(formData)
+        .then(() => {
+          setAlert({ show: true, type: 'success', message: 'Profile created successfully!' });
+          setTimeout(() => setAlert({ show: false, type: '', message: '' }), 5000);
+        })
+        .catch((err) => {
+          setAlert({ show: true, type: 'error', message: 'Failed to create profile. Please try again.' });
+          setTimeout(() => setAlert({ show: false, type: '', message: '' }), 5000);
+        });
     }
     else {
       patch_profile(formData)
+        .then(() => {
+          setAlert({ show: true, type: 'success', message: 'Profile updated successfully!' });
+          setTimeout(() => setAlert({ show: false, type: '', message: '' }), 5000);
+        })
+        .catch((err) => {
+          setAlert({ show: true, type: 'error', message: 'Failed to update profile. Please try again.' });
+          setTimeout(() => setAlert({ show: false, type: '', message: '' }), 5000);
+        });
     }
   }
 
@@ -74,6 +94,14 @@ export const Profile = () => {
   return (
     <div className="form-container">
       <div className="profile-heading">Profile</div>
+
+      {alert.show && (
+        <Stack sx={{ width: '100%', maxWidth: '700px', marginBottom: '20px' }} spacing={2}>
+          <Alert variant="filled" severity={alert.type}>
+            {alert.message}
+          </Alert>
+        </Stack>
+      )}
 
       <form className="profile-form" onSubmit={handleSave}>
         <div className="field-row">

@@ -1,0 +1,25 @@
+/* to be applied to the modules on select page */
+
+.module{
+    border: 2px solid rgb(115, 128, 244);
+
+    height: 18rem;
+    width: 16rem;
+
+    border-radius: 10px;
+
+    background-color: rgb(96, 130, 241);
+    font-size: 20px;
+    font-weight: 600;
+
+        transition: all 0.3s ease;
+
+}
+
+.module:hover{
+    transform: translateY(-30px) scale(1.02);
+    transition: all 0.3s ease;
+    background-color: rgb(68, 100, 203);
+    box-shadow: 5px 5px 10px #a9b7ed;
+    color: rgb(255, 255, 255);
+}

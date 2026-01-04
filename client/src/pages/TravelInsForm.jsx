@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { post_travelform } from '../functions/claim_functions'
+import '../css/pages_css/Profile.css'
 
 export const TravelInsForm = () => {
 
@@ -65,15 +66,15 @@ export const TravelInsForm = () => {
     }
 
     return (
-        <>
-            <div className='w-fit mx-auto text-xl font-bold mt-5'>Travel Insurance Claim</div>
+        <div className='form-container'>
+            <div className='profile-heading'>Travel Insurance Claim</div>
 
-            <form className='w-full max-w-lg mx-auto mt-10 flex flex-col gap-4' onSubmit={handleSubmit}>
+            <form className='profile-form' onSubmit={handleSubmit}>
 
-                <div>
-                    <div>Company</div>
+                <div className='fields'>
+                    <label>Company</label>
                     <select
-                        className='border-2 w-full p-2 bg-white'
+                        className='field-input'
                         onChange={(e) => handleChange(e, 'company')}
                         value={formData.company}
                         required
@@ -85,11 +86,11 @@ export const TravelInsForm = () => {
                     </select>
                 </div>
 
-                <div>
-                    <div>Policy No.</div>
+                <div className='fields'>
+                    <label>Policy No.</label>
                     <input
                         type="text"
-                        className='border-2 w-full p-2'
+                        className='field-input'
                         onChange={(e) => handleChange(e, 'policy')}
                         value={formData.policy}
                         required
@@ -97,10 +98,10 @@ export const TravelInsForm = () => {
                 </div>
 
                 {/* 4. Travel Type Dropdown */}
-                <div>
-                    <div>Travel Type</div>
+                <div className='fields'>
+                    <label>Travel Type</label>
                     <select
-                        className='border-2 w-full p-2 bg-white'
+                        className='field-input'
                         onChange={(e) => handleChange(e, 'travel_type')}
                         value={formData.travel_type}
                         required
@@ -111,11 +112,11 @@ export const TravelInsForm = () => {
                     </select>
                 </div>
 
-                <div>
-                    <div>Incident Date</div>
+                <div className='fields'>
+                    <label>Incident Date</label>
                     <input
                         type="date"
-                        className='border-2 w-full p-2'
+                        className='field-input'
                         onChange={(e) => handleChange(e, 'incident_date')}
                         value={formData.incident_date}
                         required
@@ -123,23 +124,25 @@ export const TravelInsForm = () => {
                 </div>
 
                 <div>
-                    <div>Claim Amount</div>
+                    <div className='fields'>
+                        <label htmlFor="">Claim Amount</label>
                     <input
                         type="number"
-                        className='border-2 w-full p-2'
+                        className='field-input'
                         onChange={(e) => handleChange(e, 'claim')}
                         value={formData.claim}
                         required
                     />
+                    </div>
                 </div>
 
-                <div>
-                    <div>Incident Description (User Story)</div>
-                    <div className="text-xs text-gray-500 mb-1">
+                <div className='fields'>
+                    <label>Incident Description (User Story)</label>
+                    <div style={{fontSize: '12px', color: '#666', marginBottom: '5px'}}>
                         Please include: object name, brand, visible colors, material, size, and any distinctive markings/logos.
                     </div>
                     <textarea
-                        className='border-2 w-full p-2'
+                        className='field-input'
                         onChange={(e) => handleChange(e, 'user_story')}
                         value={formData.user_story}
                         placeholder="E.g., Lost Samsonite suitcase, Black hard-shell, Large size, with a red ribbon on the handle..."
@@ -151,11 +154,11 @@ export const TravelInsForm = () => {
                 {/* 5. Conditional File Inputs */}
 
                 {/* Always Show Ticket */}
-                <div>
-                    <div>Travel Ticket (Image/PDF)</div>
+                <div className='fields'>
+                    <label>Travel Ticket (Image/PDF)</label>
                     <input
                         type="file"
-                        className='border-2 w-full p-2'
+                        className='field-input'
                         onChange={(e) => handleFileChange(e, 'ticket_file')}
                         required
                     />
@@ -164,21 +167,21 @@ export const TravelInsForm = () => {
                 {/* Only Show Passport & Visa if International */}
                 {formData.travel_type === 'International' && (
                     <>
-                        <div>
-                            <div>Passport Copy (Image/PDF)</div>
+                        <div className='fields'>
+                            <label>Passport Copy (Image/PDF)</label>
                             <input
                                 type="file"
-                                className='border-2 w-full p-2'
+                                className='field-input'
                                 onChange={(e) => handleFileChange(e, 'passport_file')}
                                 required
                             />
                         </div>
 
-                        <div>
-                            <div>Visa Copy (Image/PDF)</div>
+                        <div className='fields'>
+                            <label>Visa Copy (Image/PDF)</label>
                             <input
                                 type="file"
-                                className='border-2 w-full p-2'
+                                className='field-input'
                                 onChange={(e) => handleFileChange(e, 'visa_file')}
                                 required
                             />
@@ -191,6 +194,6 @@ export const TravelInsForm = () => {
                 </button>
 
             </form>
-        </>
+        </div>
     )
 }

@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { post_healthform } from '../functions/claim_functions'
+import '../css/pages_css/HealthInsForm.css'
 
 export const HealthInsForm = () => {
 
@@ -56,16 +57,16 @@ export const HealthInsForm = () => {
     }
 
     return (
-        <>
-            <div className='w-fit mx-auto text-xl font-bold mt-5'>Health Insurance Claim</div>
+        <div className='form-container'>
+            <div className='profile-heading'>Health Insurance Claim</div>
 
-            <form className='w-full max-w-lg mx-auto mt-10 flex flex-col gap-4' onSubmit={handleSubmit}>
+            <form className='profile-form' onSubmit={handleSubmit}>
 
                 {/* 4. Company Field changed to Dropdown */}
-                <div>
-                    <div>Company</div>
+                <div className='fields'>
+                    <label>Company</label>
                     <select
-                        className='border-2 w-full p-2 bg-white'
+                        className='field-input'
                         onChange={(e) => handleChange(e, 'company')}
                         value={formData.company}
                         required
@@ -77,66 +78,66 @@ export const HealthInsForm = () => {
                     </select>
                 </div>
 
-                <div>
-                    <div>Policy No.</div>
+                <div className='fields'>
+                    <label>Policy No.</label>
                     <input
                         type="text"
-                        className='border-2 w-full p-2'
+                        className='field-input'
                         onChange={(e) => handleChange(e, 'policy')}
                         value={formData.policy}
                         required
                     />
                 </div>
 
-                <div>
-                    <div>Patient Name</div>
+                <div className='fields'>
+                    <label>Patient Name</label>
                     <input
                         type="text"
-                        className='border-2 w-full p-2'
+                        className='field-input'
                         onChange={(e) => handleChange(e, 'p_name')}
                         value={formData.p_name}
                         required
                     />
                 </div>
 
-                <div>
-                    <div>Hospital ID</div>
+                <div className='fields'>
+                    <label>Hospital ID</label>
                     <input
                         type="text"
-                        className='border-2 w-full p-2'
+                        className='field-input'
                         onChange={(e) => handleChange(e, 'hosp_id')}
                         value={formData.hosp_id}
                         required
                     />
                 </div>
 
-                <div>
-                    <div>Hospital Name</div>
+                <div className='fields'>
+                    <label>Hospital Name</label>
                     <input
                         type="text"
-                        className='border-2 w-full p-2'
+                        className='field-input'
                         onChange={(e) => handleChange(e, 'hosp_name')}
                         value={formData.hosp_name}
                         required
                     />
                 </div>
 
-                <div className='flex gap-4'>
-                    <div className='w-1/2'>
-                        <div>Admission Date</div>
+                <div className='field-row'>
+                    <div className='fields'>
+                        <label>Admission Date</label>
                         <input
                             type="date"
-                            className='border-2 w-full p-2'
+                            className='field-input'
                             onChange={(e) => handleChange(e, 'ad_date')}
                             value={formData.ad_date}
                             required
                         />
                     </div>
-                    <div className='w-1/2'>
-                        <div>Discharge Date</div>
+                    <div className='fields'>
+                        <label>Discharge Date</label>
                         <input
                             type="date"
-                            className='border-2 w-full p-2'
+                            className='field-input'
                             onChange={(e) => handleChange(e, 'dis_date')}
                             value={formData.dis_date}
                             required
@@ -144,32 +145,32 @@ export const HealthInsForm = () => {
                     </div>
                 </div>
 
-                <div>
-                    <div>Ailment</div>
+                <div className='fields'>
+                    <label>Ailment</label>
                     <input
                         type="text"
-                        className='border-2 w-full p-2'
+                        className='field-input'
                         onChange={(e) => handleChange(e, 'ailment')}
                         value={formData.ailment}
                         required
                     />
                 </div>
 
-                <div>
-                    <div>Claim Amount</div>
+                <div className='fields'>
+                    <label>Claim Amount</label>
                     <input
                         type="number"
-                        className='border-2 w-full p-2'
+                        className='field-input'
                         onChange={(e) => handleChange(e, 'claim')}
                         value={formData.claim}
                         required
                     />
                 </div>
 
-                <div>
-                    <div>User Story</div>
+                <div className='fields'>
+                    <label>User Story</label>
                     <textarea
-                        className='border-2 w-full p-2'
+                        className='field-input'
                         onChange={(e) => handleChange(e, 'user_story')}
                         value={formData.user_story}
                         required
@@ -180,32 +181,32 @@ export const HealthInsForm = () => {
                 {/* 5. Split File Inputs */}
                 
                 {/* Field A: Medical Bill */}
-                <div>
-                    <div>Medical Bill (Image/PDF)</div>
+                <div className='fields'>
+                    <label>Medical Bill (Image/PDF)</label>
                     <input
                         type="file"
-                        className='border-2 w-full p-2'
+                        className='field-input'
                         onChange={(e) => handleFileChange(e, 'medical_bill')}
                         required
                     />
                     {formData.medical_bill && (
-                        <p className='text-xs text-green-600 mt-1'>
+                        <p style={{fontSize: '12px', color: '#22c55e', marginTop: '5px'}}>
                             Selected: {formData.medical_bill.name}
                         </p>
                     )}
                 </div>
 
                 {/* Field B: Medical Report */}
-                <div>
-                    <div>Medical Report (Image/PDF)</div>
+                <div className='fields'>
+                    <label>Medical Report (Image/PDF)</label>
                     <input
                         type="file"
-                        className='border-2 w-full p-2'
+                        className='field-input'
                         onChange={(e) => handleFileChange(e, 'medical_report')}
                         required
                     />
                     {formData.medical_report && (
-                        <p className='text-xs text-green-600 mt-1'>
+                        <p style={{fontSize: '12px', color: '#22c55e', marginTop: '5px'}}>
                             Selected: {formData.medical_report.name}
                         </p>
                     )}
@@ -217,6 +218,6 @@ export const HealthInsForm = () => {
 
             </form>
 
-        </>
+        </div>
     )
 }
