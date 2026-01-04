@@ -14,7 +14,7 @@ const LeftSection = () => {
       </div>
       
       <h1 className="hero-title">
-        Manage Your Insurance Claims with Confidence
+        Claims Made Easy!
       </h1>
       
       <p className="hero-subtitle">
@@ -31,7 +31,7 @@ const LeftSection = () => {
 
         <div className="feature-item">
           <div className="feature-text">
-            <h4>Fast Claim Processing</h4>
+            <h4>Agnetic AI verification</h4>
             <p>Submit and track your claims with quick approval times.</p>
           </div>
         </div>
@@ -39,24 +39,14 @@ const LeftSection = () => {
         <div className="feature-item">
           <div className="feature-text">
             <h4>Secure & Reliable</h4>
-            <p>Your personal information is protected with industry-leading security.</p>
+            <p>Your personal information is protected with Blockchain technology.</p>
           </div>
         </div>
       </div>
 
-      <div className="trust-indicators">
-        <div className="trust-item">
-          <span className="trust-number">50K+</span>
-          <span className="trust-label">Active Policies</span>
-        </div>
-        <div className="trust-item">
-          <span className="trust-number">98%</span>
-          <span className="trust-label">Customer Satisfaction</span>
-        </div>
-        <div className="trust-item">
-          <span className="trust-number">24/7</span>
-          <span className="trust-label">Support Available</span>
-        </div>
+      <div className="copyright-warning justify-center">
+        <p>© 2026 SecureLife Insurance. All rights reserved.</p>
+        
       </div>
     </div>
   );

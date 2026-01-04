@@ -27,7 +27,7 @@ const LoginForm = ({ method, setmethod, setisOTP, loginContext, navigate }) => {
 
   return (
     <div className="page">
-      {/* <LeftSection /> */}
+      <LeftSection />
     <div className="login-signup-form">
       
       <div className="login-tabs">

@@ -26,7 +26,7 @@ export const Header = () => {
         </div>
 
         <div
-          className="    w-[50px] h-[50px] rounded-[50%] text-center bg-[violet] absolute right-[10px]"
+          className="    w-[50px] h-[50px] rounded-[50%] text-center bg-[violet] absolute right-[20px]"
           
         >
           <div

@@ -16,6 +16,13 @@
     }
 }
 
+.page{
+    display: flex;
+}
+
+body {
+  overflow-y: hidden;
+}
 
 
 
