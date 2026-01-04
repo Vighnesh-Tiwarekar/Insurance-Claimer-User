@@ -53,6 +53,43 @@ export const Profile = () => {
 
   const handleChange = (e) => {
     const { id, value } = e.target;
+    
+    // Validation rules
+    if (id === 'name') {
+      // Only allow letters and spaces
+      if (value && !/^[a-zA-Z\s]*$/.test(value)) {
+        return;
+      }
+    }
+    
+    if (id === 'adhaar') {
+      // Only allow numbers and max 16 digits
+      if (value && (!/^\d*$/.test(value) || value.length > 16)) {
+        return;
+      }
+    }
+    
+    if (id === 'license') {
+      // Allow letters and numbers, max 16 characters
+      if (value && (!/^[a-zA-Z0-9]*$/.test(value) || value.length > 16)) {
+        return;
+      }
+    }
+    
+    if (id === 'email') {
+      // Basic email format validation (alphanumeric, @, ., -, _)
+      if (value && !/^[a-zA-Z0-9@._-]*$/.test(value)) {
+        return;
+      }
+    }
+    
+    if (id === 'past_claims') {
+      // Only allow positive numbers (0 or greater)
+      if (value && (!/^\d*$/.test(value) || parseInt(value) < 0)) {
+        return;
+      }
+    }
+    
     setFormData((prev) => ({ ...prev, [id]: value }));
   };
 
@@ -155,10 +192,11 @@ export const Profile = () => {
             <input
               id="adhaar"
               className="field-input"
-              type="number"
+              type="text"
               name="adharnumber"
               placeholder="xxxx xxxx xxxx xxxx"
               required
+              maxLength="16"
               value={formData.adhaar}
               onChange={handleChange}
             />
@@ -174,6 +212,7 @@ export const Profile = () => {
               type="text"
               name="veh-licence"
               placeholder="AB12345678"
+              maxLength="16"
               value={formData.license}
               onChange={handleChange}
             />
@@ -188,6 +227,7 @@ export const Profile = () => {
               name="pastclaim"
               placeholder="Enter no of past claims"
               required
+              min="0"
               value={formData.past_claims}
               onChange={handleChange}
             />

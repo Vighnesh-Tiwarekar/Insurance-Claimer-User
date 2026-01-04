@@ -15,7 +15,7 @@ export const Header = () => {
   };
 
   return (
-    <>
+    <div className="fixed w-screen">
       <div className="flex p-[10px] bg-[#59ad7e]">
         <div className="border-[1.5px] w-[50px] h-[50px] rounded-[50%] overflow-hidden">
           logo
@@ -64,6 +64,6 @@ export const Header = () => {
 
        
       </div>
-    </>
+    </div>
   );
 };

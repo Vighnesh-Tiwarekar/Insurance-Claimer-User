@@ -1,8 +1,12 @@
 import React, { useState } from 'react'
 import { post_healthform } from '../functions/claim_functions'
 import '../css/pages_css/HealthInsForm.css'
+import Alert from '@mui/material/Alert'
+import Stack from '@mui/material/Stack'
 
 export const HealthInsForm = () => {
+
+    const [alert, setAlert] = useState({ show: false, type: '', message: '' })
 
     // 1. Updated state to hold specific file fields instead of an array
     const [formData, setFormData] = useState({
@@ -31,7 +35,40 @@ export const HealthInsForm = () => {
     ];
 
     const handleChange = (e, name) => {
-        setFormData((prev) => ({ ...prev, [name]: e.target.value }))
+        const value = e.target.value;
+        
+        // Validation rules for different fields
+        if (name === 'p_name' || name === 'hosp_name' || name === 'ailment') {
+            // Only allow letters and spaces for names
+            if (value && !/^[a-zA-Z\s]*$/.test(value)) {
+                return; // Block invalid input
+            }
+        }
+        
+        if (name === 'policy' || name === 'hosp_id') {
+            // Only allow letters and numbers (alphanumeric)
+            if (value && !/^[a-zA-Z0-9]*$/.test(value)) {
+                return;
+            }
+        }
+        
+        if (name === 'claim') {
+            // Only allow positive numbers for claim amount
+            if (value && (!/^\d*\.?\d*$/.test(value) || parseFloat(value) < 0)) {
+                return;
+            }
+        }
+        
+        setFormData((prev) => ({ ...prev, [name]: value }))
+    }
+
+    const handleRestriction = (e) => {
+        const {id, value} = e.target;
+
+        if(id === 'name')
+        {
+
+        }
     }
 
     // 2. Updated file handler to take the field name and single file
@@ -54,11 +91,29 @@ export const HealthInsForm = () => {
         });
 
         post_healthform(dataPayload)
+            .then(() => {
+                setAlert({ show: true, type: 'success', message: 'Health insurance claim submitted successfully!' })
+                setTimeout(() => setAlert({ show: false, type: '', message: '' }), 5000)
+            })
+            .catch((err) => {
+                setAlert({ show: true, type: 'error', message: 'Failed to submit claim. Please try again.' })
+                setTimeout(() => setAlert({ show: false, type: '', message: '' }), 5000)
+            })
     }
+
+    
 
     return (
         <div className='form-container'>
             <div className='profile-heading'>Health Insurance Claim</div>
+
+            {alert.show && (
+                <Stack sx={{ width: '100%', maxWidth: '700px', marginBottom: '20px' }} spacing={2}>
+                    <Alert variant="filled" severity={alert.type}>
+                        {alert.message}
+                    </Alert>
+                </Stack>
+            )}
 
             <form className='profile-form' onSubmit={handleSubmit}>
 
@@ -69,6 +124,7 @@ export const HealthInsForm = () => {
                         className='field-input'
                         onChange={(e) => handleChange(e, 'company')}
                         value={formData.company}
+                        
                         required
                     >
                         <option value="" disabled>Select Insurance Company</option>
@@ -163,6 +219,8 @@ export const HealthInsForm = () => {
                         className='field-input'
                         onChange={(e) => handleChange(e, 'claim')}
                         value={formData.claim}
+                        min="0"
+                        step="0.01"
                         required
                     />
                 </div>

@@ -1,8 +1,12 @@
 import React, { useState } from 'react'
 import { post_travelform } from '../functions/claim_functions'
 import '../css/pages_css/Profile.css'
+import Alert from '@mui/material/Alert'
+import Stack from '@mui/material/Stack'
 
 export const TravelInsForm = () => {
+
+    const [alert, setAlert] = useState({ show: false, type: '', message: '' })
 
     // 1. Updated state to handle specific files and travel type
     const [formData, setFormData] = useState({
@@ -28,7 +32,25 @@ export const TravelInsForm = () => {
     ];
 
     const handleChange = (e, name) => {
-        setFormData((prev) => ({ ...prev, [name]: e.target.value }))
+        const value = e.target.value; // ✅ Get the value first!
+
+        // Validation for policy - allow letters, numbers, hyphens, and slashes
+        if(name === 'policy')
+        {
+            if(value && (!/^[a-zA-Z0-9\-\/]*$/.test(value)))
+            {
+                return;
+            }
+        }
+
+        if(name === 'claim')
+        {
+            if (value && (!/^\d*\.?\d*$/.test(value) || parseFloat(value) < 0)) {
+                return;
+            }
+        }
+
+        setFormData((prev) => ({ ...prev, [name]: value }))
     }
 
     // 2. Updated file handler to accept specific field names
@@ -61,13 +83,27 @@ export const TravelInsForm = () => {
         }
 
         post_travelform(dataPayload)
-            .then(() => alert("Travel claim submitted!"))
-            .catch((err) => alert("Submission failed"));
+            .then(() => {
+                setAlert({ show: true, type: 'success', message: 'Travel insurance claim submitted successfully!' })
+                setTimeout(() => setAlert({ show: false, type: '', message: '' }), 5000)
+            })
+            .catch((err) => {
+                setAlert({ show: true, type: 'error', message: 'Failed to submit claim. Please try again.' })
+                setTimeout(() => setAlert({ show: false, type: '', message: '' }), 5000)
+            });
     }
 
     return (
         <div className='form-container'>
             <div className='profile-heading'>Travel Insurance Claim</div>
+
+            {alert.show && (
+                <Stack sx={{ width: '100%', maxWidth: '700px', marginBottom: '20px' }} spacing={2}>
+                    <Alert variant="filled" severity={alert.type}>
+                        {alert.message}
+                    </Alert>
+                </Stack>
+            )}
 
             <form className='profile-form' onSubmit={handleSubmit}>
 

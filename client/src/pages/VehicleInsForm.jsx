@@ -1,8 +1,12 @@
 import React, { useState } from 'react'
 import { post_vehicleform } from '../functions/claim_functions'
 import '../css/pages_css/Profile.css'
+import Alert from '@mui/material/Alert'
+import Stack from '@mui/material/Stack'
 
 export const VehicleInsForm = () => {
+
+    const [alert, setAlert] = useState({ show: false, type: '', message: '' })
 
     const [formData, setFormData] = useState({
         company: '',
@@ -38,7 +42,45 @@ export const VehicleInsForm = () => {
     ];
 
     const handleChange = (e, name) => {
-        setFormData((prev) => ({ ...prev, [name]: e.target.value }))
+        const value = e.target.value;
+
+        // Validation rules for different fields
+        if (name === 'driver_name') {
+            // Only allow letters and spaces for driver name
+            if (value && !/^[a-zA-Z\s]*$/.test(value)) {
+                return;
+            }
+        }
+
+        if (name === 'policy') {
+            // Allow letters, numbers, hyphens, and slashes for policy number
+            if (value && !/^[a-zA-Z0-9\-\/]*$/.test(value)) {
+                return;
+            }
+        }
+
+        if (name === 'driver_license') {
+            // Allow letters and numbers, max 16 characters
+            if (value && (!/^[a-zA-Z0-9]*$/.test(value) || value.length > 16)) {
+                return;
+            }
+        }
+
+        if (name === 'vehicle_no') {
+            // Vehicle number format: letters, numbers, and hyphens (e.g., MH-12-AB-1234)
+            if (value && !/^[a-zA-Z0-9\-]*$/.test(value)) {
+                return;
+            }
+        }
+
+        if (name === 'claim') {
+            // Only allow positive numbers for claim amount
+            if (value && (!/^\d*\.?\d*$/.test(value) || parseFloat(value) < 0)) {
+                return;
+            }
+        }
+
+        setFormData((prev) => ({ ...prev, [name]: value }))
     }
 
     const handleFileChange = (e) => {
@@ -63,13 +105,27 @@ export const VehicleInsForm = () => {
         });
 
         post_vehicleform(dataPayload)
-            .then(() => alert("Vehicle claim submitted!"))
-            .catch((err) => alert("Submission failed"));
+            .then(() => {
+                setAlert({ show: true, type: 'success', message: 'Vehicle insurance claim submitted successfully!' })
+                setTimeout(() => setAlert({ show: false, type: '', message: '' }), 5000)
+            })
+            .catch((err) => {
+                setAlert({ show: true, type: 'error', message: 'Failed to submit claim. Please try again.' })
+                setTimeout(() => setAlert({ show: false, type: '', message: '' }), 5000)
+            });
     }
 
     return (
         <div className='form-container'>
             <div className='profile-heading'>Vehicle Insurance Claim</div>
+
+            {alert.show && (
+                <Stack sx={{ width: '100%', maxWidth: '700px', marginBottom: '20px' }} spacing={2}>
+                    <Alert variant="filled" severity={alert.type}>
+                        {alert.message}
+                    </Alert>
+                </Stack>
+            )}
 
             <form className='profile-form' onSubmit={handleSubmit}>
 
@@ -145,6 +201,7 @@ export const VehicleInsForm = () => {
                         className='field-input'
                         onChange={(e) => handleChange(e, 'driver_license')}
                         value={formData.driver_license}
+                        maxLength="16"
                         required
                     />
                 </div>
@@ -167,6 +224,8 @@ export const VehicleInsForm = () => {
                         className='field-input'
                         onChange={(e) => handleChange(e, 'claim')}
                         value={formData.claim}
+                        min="0"
+                        step="0.01"
                         required
                     />
                 </div>
