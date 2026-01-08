@@ -9,8 +9,13 @@ import { SelectType } from '../pages/SelectType'
 import { HealthInsForm } from '../pages/HealthInsForm'
 import { TravelInsForm } from '../pages/TravelInsForm'
 import { VehicleInsForm } from '../pages/VehicleInsForm'
+import Landing from '../pages/Landing'
 
 export const Router = createBrowserRouter([
+    {
+        path: '/',
+        element: <Landing></Landing>
+    },
     {
         path: '/login',
         element: <Login></Login>
@@ -23,7 +28,7 @@ export const Router = createBrowserRouter([
                 element: <ProtectedRoutes></ProtectedRoutes>,
                 children: [
                     {
-                        path: '/',
+                        path: '/home',
                         element: <Home></Home>
                     },
 

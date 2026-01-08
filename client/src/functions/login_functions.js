@@ -95,7 +95,7 @@ export const validate_otp = async (loginContext, navigate, setMsg) => {
 
         if (res.status == 202) {
             loginContext.setlogin(true)
-            navigate('/')
+            navigate('/home')
         }
         else {
             setMsg(res.data.mssg)
@@ -128,7 +128,7 @@ export const sign_in = async (loginContext, navigate, setMssg) => {
 
         if (res.status == 202) {
             loginContext.setlogin(true)
-            navigate('/')
+            navigate('/home')
         }
         else {
             setMssg(res.data.mssg)

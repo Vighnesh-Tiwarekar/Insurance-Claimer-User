@@ -6,6 +6,6 @@ export const ProtectedRoutes = () => {
 
     const loginContext = useContext(AuthContext);
 
-    return (loginContext.login ? <Outlet></Outlet> : <Navigate to='/login' replace></Navigate>)
+    return (loginContext.login ? <Outlet></Outlet> : <Navigate to='/' replace></Navigate>)
 
 }

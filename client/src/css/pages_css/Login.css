@@ -1,4 +1,4 @@
-/* Login Page Container */
+
 .login-signup-form {
     min-height: 100vh;
     display: flex;
@@ -7,6 +7,7 @@
     align-items: center;
     background-color: rgb(228, 228, 228);
     padding: 20px;
+
 }
 
 @media (min-width: 880px) {
@@ -18,6 +19,7 @@
 
 .page{
     display: flex;
+
 }
 
 
