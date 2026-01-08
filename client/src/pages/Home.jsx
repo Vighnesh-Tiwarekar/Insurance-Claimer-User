@@ -1,10 +1,14 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useClaims } from '../hooks/useClaims';
+import { ClaimCard } from '../components/ClaimCard';
+import { LoadingPage } from './LoadingPage';
 import '../css/pages_css/Home.css';
 
 export const Home = () => {
   const [selectedType, setSelectedType] = useState(null);
   const navigate = useNavigate();
+  const { data, isLoading, isError } = useClaims();
 
   const handleContinue = () => {
     if (selectedType) {
@@ -53,6 +57,12 @@ export const Home = () => {
       borderColor: 'border-green',
     },
   ];
+
+  if (isLoading) {
+    return <LoadingPage />;
+  }
+
+  const claimsList = data?.claims || [];
 
   return (
     <div className="select-container">
@@ -123,6 +133,24 @@ export const Home = () => {
             <p className="help-text">
               Please select an insurance type to continue
             </p>
+          )}
+        </div>
+
+        {/* Claims History Section */}
+        <div className="claims-history-section">
+          <h2 className="history-title">My Claims History</h2>
+          {claimsList.length === 0 ? (
+            <div className="empty-claims">
+              <div className="empty-icon">📋</div>
+              <h3>No Claims Yet</h3>
+              <p>You haven't submitted any insurance claims. File your first claim above to get started.</p>
+            </div>
+          ) : (
+            <div className="claims-history-grid">
+              {claimsList.map((claim) => (
+                <ClaimCard key={claim._id} claim={claim} />
+              ))}
+            </div>
           )}
         </div>
       </main>

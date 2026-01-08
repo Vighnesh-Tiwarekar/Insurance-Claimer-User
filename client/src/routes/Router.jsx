@@ -10,6 +10,8 @@ import { HealthInsForm } from '../pages/HealthInsForm'
 import { TravelInsForm } from '../pages/TravelInsForm'
 import { VehicleInsForm } from '../pages/VehicleInsForm'
 import Landing from '../pages/Landing'
+import { AdminLogin } from '../admin/pages/AdminLogin'
+import { Dashboard } from '../admin/pages/Dashboard'
 
 export const Router = createBrowserRouter([
     {
@@ -19,6 +21,14 @@ export const Router = createBrowserRouter([
     {
         path: '/login',
         element: <Login></Login>
+    },
+    {
+        path: '/admin/login',
+        element: <AdminLogin></AdminLogin>
+    },
+    {
+        path: '/admin/dashboard',
+        element: <Dashboard></Dashboard>
     },
 
     {

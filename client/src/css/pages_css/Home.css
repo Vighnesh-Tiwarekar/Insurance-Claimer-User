@@ -190,6 +190,55 @@
   font-size: 0.875rem;
 }
 
+/* Claims History Section */
+.claims-history-section {
+  margin-top: 4rem;
+  padding-top: 3rem;
+  border-top: 2px solid #e5e7eb;
+}
+
+.history-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.empty-claims {
+  text-align: center;
+  padding: 4rem 2rem;
+  background-color: white;
+  border-radius: 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.empty-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.empty-claims h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0 0 0.75rem 0;
+}
+
+.empty-claims p {
+  color: #6b7280;
+  font-size: 1rem;
+  max-width: 500px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.claims-history-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 1.5rem;
+}
+
 /* Responsive Design */
 @media (max-width: 1024px) {
   .main-title {
@@ -227,6 +276,14 @@
   .continue-btn {
     width: 100%;
   }
+
+  .claims-history-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .history-title {
+    font-size: 1.75rem;
+  }
 }
 
 @media (max-width: 480px) {
@@ -250,5 +307,13 @@
 
   .logo {
     font-size: 1.25rem;
+  }
+
+  .history-title {
+    font-size: 1.5rem;
+  }
+
+  .empty-claims {
+    padding: 3rem 1.5rem;
   }
 }

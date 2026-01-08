@@ -35,7 +35,7 @@ function Landing() {
               User Login
             </button>
             <button 
-              onClick={() => navigate('/login')}
+              onClick={() => navigate('/admin/login')}
               className="bg-white text-blue-700 px-8 py-3 rounded-md font-semibold hover:bg-blue-50 transition shadow-lg"
             >
               Admin Login
